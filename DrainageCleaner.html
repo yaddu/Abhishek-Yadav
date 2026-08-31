@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Drainage Cleaner - Mason Watchers</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Poppins', sans-serif; color: #333; line-height: 1.6; background-color: #f4f6f8; }
+
+header { background-color: #000; color: #fff; padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 1000; flex-wrap: wrap; gap: 1rem; }
+.logo-box { border: 1px solid #fff; border-radius: 6px; padding: 0.3rem 0.9rem; font-size: 1.6rem; font-weight: 600; }
+header nav a { color: #fff; text-decoration: none; margin-left: 1.5rem; transition: color 0.3s ease; }
+header nav a:hover { color: #4a90c4; }
+
+.page-banner { background: linear-gradient(rgba(28,43,54,0.75), rgba(28,43,54,0.75)), url('drainage cleaner.webp') no-repeat center center/cover; color: #fff; text-align: center; padding: 3.5rem 2rem; }
+.page-banner h1 { font-size: 2.3rem; margin-bottom: 0.6rem; }
+.page-banner p { font-size: 1.05rem; color: #dfe6ec; }
+
+.section { padding: 3rem 2rem; text-align: center; }
+.section h2 { font-size: 1.9rem; margin-bottom: 0.4rem; color: #1c2b36; }
+.section .subtext { color: #667684; margin-bottom: 1rem; font-size: 0.95rem; }
+.notice { background-color: #fff8e6; border: 1px solid #f0d98c; color: #7a5c00; border-radius: 6px; padding: 0.8rem 1.2rem; max-width: 700px; margin: 0 auto 2rem; font-size: 0.85rem; }
+
+.worker-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 2rem; max-width: 1200px; margin: 0 auto; }
+
+.worker-card { border: 1px solid #d5dde3; border-radius: 10px; overflow: hidden; background-color: #fff; text-align: left; transition: transform 0.3s ease, box-shadow 0.3s ease; }
+.worker-card:hover { transform: translateY(-8px); box-shadow: 0 10px 24px rgba(28, 43, 54, 0.18); }
+.worker-card img { width: 100%; height: 210px; object-fit: cover; }
+.worker-card .info { padding: 1.1rem; }
+.worker-card h3 { font-size: 1.15rem; color: #1c2b36; margin-bottom: 0.3rem; }
+.worker-meta { font-size: 0.85rem; color: #667684; margin-bottom: 0.6rem; }
+.worker-meta .stars { color: #f5a623; }
+.badge { display: inline-block; background-color: #e5f0f8; color: #2e5c80; font-size: 0.72rem; font-weight: 600; padding: 0.2rem 0.6rem; border-radius: 4px; margin-bottom: 0.6rem; }
+.worker-price { font-size: 1.05rem; font-weight: 600; color: #1c2b36; margin-bottom: 0.8rem; }
+.worker-price span { font-size: 0.8rem; font-weight: 400; color: #667684; }
+.book-btn { display: block; width: 100%; padding: 0.65rem; background-color: #4a90c4; color: #fff; border: none; border-radius: 6px; font-family: 'Poppins', sans-serif; font-size: 0.9rem; font-weight: 600; cursor: pointer; text-align: center; text-decoration: none; transition: background-color 0.3s ease; }
+.book-btn:hover { background-color: #2e5c80; }
+
+.footer { background-color: #1c2b36; color: #cfd8de; text-align: center; padding: 1.5rem 2rem; }
+.footer a { color: #4a90c4; text-decoration: none; }
+.footer a:hover { color: #6ba8d8; }
+
+@media (max-width: 768px) {
+header nav a { margin-left: 0.8rem; font-size: 0.85rem; }
+.page-banner h1 { font-size: 1.8rem; }
+}
+</style>
+</head>
+<body>
+
+<header>
+<div class="logo-box">Mason Watchers</div>
+<nav>
+<a href="Index.html">Home</a>
+<a href="Carpenter.html">Carpenters</a>
+<a href="Plumbers.html">Plumbers</a>
+<a href="Electrician.html">Electrician</a>
+<a href="Labours.html">Labours</a>
+<a href="Masons.html">Mason</a>
+</nav>
+</header>
+
+<div class="page-banner">
+<h1>Drainage Cleaner</h1>
+<p>Professional drainage and pipe cleaning, done right.</p>
+</div>
+
+<section class="section">
+<h2>Available Drainage Cleaner</h2>
+<p class="subtext">Tap a profile to book</p>
+<div class="notice">📸 Demo profiles below reuse one placeholder photo — add individual worker photos to make each listing unique, the same way Carpenter.html uses carpenter1.webp through carpenter10.webp.</div>
+<div class="worker-grid">
+
+<div class="worker-card">
+<img src="drainage cleaner.webp" alt="Anil Verma - Drainage Cleaner">
+<div class="info">
+<span class="badge">✔ Verified</span>
+<h3>Anil Verma</h3>
+<div class="worker-meta"><span class="stars">★★★★★</span> 4.7 (63 reviews) &middot; 6 yrs exp</div>
+<p class="worker-price">$59 <span>/day</span></p>
+<a href="Index.html#contact" class="book-btn">Book Now</a>
+</div>
+</div>
+<div class="worker-card">
+<img src="drainage cleaner.webp" alt="Deepak Rao - Drainage Cleaner">
+<div class="info">
+<span class="badge">✔ Verified</span>
+<h3>Deepak Rao</h3>
+<div class="worker-meta"><span class="stars">★★★★☆</span> 4.5 (38 reviews) &middot; 4 yrs exp</div>
+<p class="worker-price">$59 <span>/day</span></p>
+<a href="Index.html#contact" class="book-btn">Book Now</a>
+</div>
+</div>
+</div>
+</section>
+
+<footer class="footer">
+<p>&copy; 2026 Mason Watchers. All rights reserved. | <a href="Index.html">Back to Home</a></p>
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,954 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mason Watchers</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+<style>
+* {
+margin: 0;
+padding: 0;
+box-sizing: border-box;
+}
+html {
+scroll-behavior: smooth;
+scroll-padding-top: 90px;
+}
+.product-card:target {
+animation: highlightCard 1.8s ease;
+}
+@keyframes highlightCard {
+0% { box-shadow: 0 0 0 4px #4a90c4; }
+100% { box-shadow: 0 8px 20px rgba(28, 43, 54, 0.2); }
+}
+body {
+font-family: 'Poppins', sans-serif;
+color: #333;
+line-height: 1.6;
+background-color: #f4f6f8;
+}
+header {
+background-color: #000;
+color: #fff;
+padding: 1rem 2rem;
+display: flex;
+justify-content: space-between;
+align-items: center;
+position: sticky;
+top: 0;
+z-index: 1000;
+}
+header .logo-box {
+font-size: 1.8rem;
+font-weight: 600;
+color: #fff;
+}
+header nav a {
+color: #fff;
+text-decoration: none;
+margin-left: 2rem;
+transition: color 0.3s ease;
+}
+header nav a:hover {
+color: #4a90c4;
+}
+.logo-box {
+position: relative;
+border: 1px solid #fff;
+border-radius: 6px;
+padding: 0.3rem 0.9rem;
+cursor: default;
+font-size: 1.6rem;
+}
+.logo-box:hover {
+border-color: #4a90c4;
+}
+.logo-popup {
+position: absolute;
+top: 115%;
+left: 0;
+background-color: #fff;
+color: #333;
+border-radius: 8px;
+padding: 0.9rem 1.1rem;
+width: 220px;
+box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+opacity: 0;
+visibility: hidden;
+transform: translateY(-8px);
+transition: opacity 0.25s ease, transform 0.25s ease, visibility 0.25s;
+z-index: 1100;
+font-size: 0.85rem;
+line-height: 1.4;
+text-align: left;
+}
+.logo-box:hover .logo-popup {
+opacity: 1;
+visibility: visible;
+transform: translateY(0);
+}
+.auth-box {
+position: relative;
+display: flex;
+gap: 0.8rem;
+border: 1px solid #fff;
+border-radius: 6px;
+padding: 0.4rem 0.9rem;
+cursor: pointer;
+}
+.auth-box:hover {
+border-color: #4a90c4;
+}
+.auth-popup {
+position: absolute;
+top: 115%;
+right: 0;
+background-color: #fff;
+color: #333;
+border-radius: 8px;
+padding: 1.1rem;
+width: 230px;
+box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+opacity: 0;
+visibility: hidden;
+transform: translateY(-8px);
+transition: opacity 0.25s ease, transform 0.25s ease, visibility 0.25s;
+z-index: 1100;
+font-size: 0.85rem;
+line-height: 1.5;
+text-align: left;
+}
+.auth-box.active .auth-popup {
+opacity: 1;
+visibility: visible;
+transform: translateY(0);
+}
+.auth-popup a {
+display: block;
+margin-top: 0.6rem;
+padding: 0.5rem;
+text-align: center;
+border-radius: 5px;
+text-decoration: none;
+font-size: 0.85rem;
+font-weight: 600;
+}
+.auth-popup a.login-link {
+background-color: #4a90c4;
+color: #fff;
+}
+.auth-popup a.register-link {
+background-color: #eaeff3;
+color: #1c2b36;
+}
+.utility-bar {
+background-color: #000;
+border-bottom: 1px solid #2a2a2a;
+padding: 0.9rem 2rem;
+display: flex;
+align-items: center;
+gap: 1rem;
+flex-wrap: wrap;
+}
+.location-select {
+position: relative;
+display: flex;
+align-items: center;
+gap: 0.5rem;
+background-color: #fff;
+border: 1px solid #1c2b36;
+border-radius: 6px;
+padding: 0.6rem 1rem;
+cursor: pointer;
+font-size: 0.9rem;
+color: #1c2b36;
+white-space: nowrap;
+}
+.location-select .pin {
+color: #2e5c80;
+font-size: 1rem;
+}
+.location-select .caret {
+color: #8a97a0;
+font-size: 0.7rem;
+margin-left: 0.3rem;
+}
+.location-dropdown {
+position: absolute;
+top: 115%;
+left: 0;
+background-color: #fff;
+color: #333;
+border-radius: 8px;
+padding: 0.5rem 0;
+width: 200px;
+box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+opacity: 0;
+visibility: hidden;
+transform: translateY(-8px);
+transition: opacity 0.25s ease, transform 0.25s ease, visibility 0.25s;
+z-index: 1100;
+text-align: left;
+}
+.location-select.active .location-dropdown {
+opacity: 1;
+visibility: visible;
+transform: translateY(0);
+}
+.city-option {
+padding: 0.6rem 1rem;
+font-size: 0.9rem;
+color: #1c2b36;
+cursor: pointer;
+}
+.city-option:hover {
+background-color: #eaeff3;
+}
+.search-bar {
+flex: 1;
+display: flex;
+align-items: center;
+gap: 0.6rem;
+background-color: #fff;
+border: 1px solid #1c2b36;
+border-radius: 6px;
+padding: 0.6rem 1rem;
+min-width: 200px;
+}
+.search-bar .mag {
+color: #8a97a0;
+}
+.search-bar input {
+border: none;
+outline: none;
+flex: 1;
+font-family: 'Poppins', sans-serif;
+font-size: 0.9rem;
+color: #1c2b36;
+background: transparent;
+}
+.utility-icons {
+display: flex;
+align-items: center;
+gap: 1rem;
+}
+.icon-wrapper {
+position: relative;
+}
+.icon-circle {
+display: flex;
+align-items: center;
+justify-content: center;
+width: 42px;
+height: 42px;
+border-radius: 50%;
+background-color: #fff;
+color: #1c2b36;
+font-size: 1.2rem;
+cursor: pointer;
+transition: background-color 0.3s ease, color 0.3s ease;
+}
+.icon-circle:hover {
+background-color: #1c2b36;
+color: #fff;
+}
+.icon-dropdown {
+position: absolute;
+top: 130%;
+right: 0;
+background-color: #fff;
+color: #333;
+border-radius: 8px;
+padding: 1.1rem;
+width: 230px;
+box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+opacity: 0;
+visibility: hidden;
+transform: translateY(-8px);
+transition: opacity 0.25s ease, transform 0.25s ease, visibility 0.25s;
+z-index: 1100;
+font-size: 0.85rem;
+line-height: 1.5;
+text-align: left;
+}
+.icon-wrapper.active .icon-dropdown {
+opacity: 1;
+visibility: visible;
+transform: translateY(0);
+}
+.icon-dropdown a {
+display: block;
+margin-top: 0.6rem;
+padding: 0.5rem;
+text-align: center;
+border-radius: 5px;
+text-decoration: none;
+font-size: 0.85rem;
+font-weight: 600;
+}
+.icon-dropdown a.primary-link {
+background-color: #4a90c4;
+color: #fff;
+}
+.icon-dropdown a.secondary-link {
+background-color: #eaeff3;
+color: #1c2b36;
+}
+@media (max-width: 768px) {
+.utility-bar {
+flex-direction: column;
+align-items: stretch;
+}
+.utility-icons {
+justify-content: center;
+}
+}
+.hero {
+background: url('download3.jpeg') no-repeat center center/cover;
+height: 100vh;
+display: flex;
+justify-content: center;
+align-items: center;
+text-align: center;
+color: #fff;
+padding: 2rem;
+}
+.hero h1 {
+font-size: 3.5rem;
+margin-bottom: 1rem;
+text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7);
+}
+.hero p {
+font-size: 1.5rem;
+margin-bottom: 2rem;
+}
+.hero button {
+background-color: #4a90c4;
+border: none;
+padding: 1rem 2rem;
+font-size: 1rem;
+color: #fff;
+border-radius: 5px;
+cursor: pointer;
+transition: background-color 0.3s ease;
+}
+.hero button:hover {
+background-color: #3a7aa8;
+}
+.section {
+padding: 4rem 2rem;
+text-align: center;
+}
+.section:nth-of-type(even) {
+background-color: #eaeff3;
+}
+.info-card {
+max-width: 700px;
+margin: 0 auto;
+background-color: #fff;
+border-radius: 12px;
+padding: 2.5rem;
+box-shadow: 0 8px 24px rgba(28, 43, 54, 0.12);
+border-top: 4px solid #4a90c4;
+}
+.info-card p {
+color: #444;
+font-size: 1.05rem;
+}
+.contact-item {
+display: flex;
+align-items: center;
+justify-content: center;
+gap: 0.75rem;
+margin: 1rem 0;
+font-size: 1.05rem;
+color: #333;
+}
+.contact-item .icon {
+font-size: 1.3rem;
+}
+.contact-item a {
+color: #1c2b36;
+text-decoration: none;
+font-weight: 600;
+}
+.contact-item a:hover {
+color: #4a90c4;
+}
+.section h2 {
+font-size: 2.5rem;
+margin-bottom: 1.5rem;
+color: #1c2b36;
+}
+.product-grid {
+display: grid;
+grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+gap: 2rem;
+padding: 1rem;
+}
+.product-card {
+border: 1px solid #d5dde3;
+border-radius: 8px;
+overflow: hidden;
+background-color: #fff;
+transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.product-card:hover {
+transform: translateY(-10px);
+box-shadow: 0 8px 20px rgba(28, 43, 54, 0.2);
+}
+.product-card img {
+width: 100%;
+height: 200px;
+object-fit: cover;
+}
+.product-card .details {
+padding: 1rem;
+border-top: 3px solid #4a90c4;
+}
+.product-card .details h3 {
+font-size: 1.2rem;
+margin-bottom: 0.5rem;
+color: #1c2b36;
+}
+.product-card .details p {
+color: #555;
+}
+@media (max-width: 768px) {
+header nav a {
+margin-left: 1rem;
+}
+.hero h1 {
+font-size: 2.5rem;
+}
+.hero p {
+font-size: 1.2rem;
+}
+}
+.footer {
+background-color: #1c2b36;
+color: #cfd8de;
+padding: 3rem 2rem 1.5rem;
+}
+.footer-top {
+max-width: 1200px;
+margin: 0 auto;
+display: flex;
+flex-wrap: wrap;
+gap: 2.5rem;
+padding-bottom: 2rem;
+border-bottom: 1px solid #33454f;
+}
+.footer-brand {
+flex: 1 1 220px;
+}
+.footer-brand .logo {
+color: #fff;
+font-size: 1.6rem;
+font-weight: 600;
+margin-bottom: 0.5rem;
+}
+.footer-col {
+flex: 1 1 180px;
+}
+.footer-col h4 {
+color: #fff;
+font-size: 1.05rem;
+margin-bottom: 1rem;
+}
+.footer-col a {
+display: block;
+color: #cfd8de;
+text-decoration: none;
+margin-bottom: 0.6rem;
+font-size: 0.95rem;
+transition: color 0.3s ease;
+}
+.footer-col a:hover {
+color: #4a90c4;
+}
+.social-icons {
+display: flex;
+gap: 0.75rem;
+margin-top: 0.5rem;
+}
+.social-icons a {
+width: 38px;
+height: 38px;
+border-radius: 50%;
+background-color: #2a3b46;
+display: flex;
+align-items: center;
+justify-content: center;
+color: #fff;
+text-decoration: none;
+font-size: 1rem;
+transition: background-color 0.3s ease;
+}
+.social-icons a:hover {
+background-color: #4a90c4;
+}
+.footer-bottom {
+max-width: 1200px;
+margin: 1.5rem auto 0;
+font-size: 0.85rem;
+color: #9aa7ae;
+}
+.footer-bottom p {
+margin: 0.3rem 0;
+}
+@media (max-width: 600px) {
+.footer-top {
+text-align: center;
+justify-content: center;
+}
+.social-icons {
+justify-content: center;
+}
+}
+</style>
+</head>
+<body>
+
+<header>
+<div class="logo-box">
+Mason Watchers
+<div class="logo-popup">
+<strong>Mason Watchers</strong><br>
+Skilled hands, trusted work. Find verified carpenters, plumbers, electricians, and more — booked in minutes.
+</div>
+</div>
+<nav>
+<a href="Carpenter.html">Carpenters</a>
+<a href="Plumbers.html">Plumbers</a>
+<a href="Electrician.html">Electrician</a>
+<a href="Labours.html">Labours</a>
+<a href="Masons.html">Mason</a>
+<a href="#new-services">More Services</a>
+<a href="#about">About Us</a>
+<a href="#contact">Contact</a>
+</nav>
+<div class="auth-box js-toggle" id="authBox">
+<span style="cursor:pointer;">Account ▾</span>
+<div class="auth-popup">
+<strong>Welcome to Mason Watchers</strong>
+<p style="margin-top:0.4rem; color:#555;">Login to manage your bookings, or register to get started.</p>
+<a href="login.html" class="login-link">LOGIN</a>
+<a href="register.html" class="register-link">REGISTER</a>
+</div>
+</div>
+</header>
+
+<div class="utility-bar">
+<div class="location-select js-toggle" id="locationBox">
+<span class="pin">📍</span>
+<span id="locationText">Select Your Location</span>
+<span class="caret">▾</span>
+<div class="location-dropdown">
+<div class="city-option" id="useMyLocation" style="color:#4a90c4; font-weight:600;">📍 Use My Location</div>
+<div class="city-option" data-city="all"><strong>All Cities</strong></div>
+<div class="city-option">New York</div>
+<div class="city-option">Los Angeles</div>
+<div class="city-option">Chicago</div>
+<div class="city-option">Houston</div>
+<div class="city-option">Miami</div>
+<div class="city-option">Seattle</div>
+</div>
+</div>
+<div class="search-bar">
+<span class="mag">🔍</span>
+<input type="text" id="serviceSearch" placeholder="Search for a service, e.g. 'Plumber'">
+</div>
+<div class="utility-icons">
+<div class="icon-wrapper js-toggle" id="bookingsWrapper">
+<span class="icon-circle" title="My Bookings">🧰</span>
+<div class="icon-dropdown">
+<strong>My Bookings</strong>
+<p style="margin-top:0.5rem; color:#555;">You have no bookings yet.</p>
+<a href="#services" class="primary-link">Browse Services</a>
+</div>
+</div>
+<div class="icon-wrapper js-toggle" id="profileWrapper">
+<span class="icon-circle" title="My Profile">👤</span>
+<div class="icon-dropdown">
+<strong>My Profile</strong>
+<p style="margin-top:0.5rem; color:#555;">Login to view and manage your profile.</p>
+<a href="login.html" class="primary-link">LOGIN</a>
+<a href="register.html" class="secondary-link">REGISTER</a>
+</div>
+</div>
+</div>
+</div>
+
+<section class="hero">
+<div>
+<h1>Skilled Hands, Trusted Work</h1>
+<p>Find verified carpenters, plumbers, electricians, and more — booked in minutes, done right the first time.</p>
+<button onclick="document.getElementById('services').scrollIntoView({behavior: 'smooth'})">Explore Now</button>
+</div>
+</section>
+
+<section class="section" id="services">
+<h2>Popular Services</h2>
+<div class="product-grid">
+
+<div class="product-card" id="carpenter-card" data-cities="New York,Los Angeles,Chicago,Houston,Miami,Seattle" onclick="window.location='Carpenter.html'" style="cursor:pointer;">
+<img src="carpenter.jpg" alt="Carpenter at work">
+<div class="details">
+<h3>Carpenter</h3>
+<p>$50 per day</p>
+</div>
+</div>
+
+<div class="product-card" id="plumber-card" data-cities="New York,Los Angeles,Chicago,Houston,Miami,Seattle" onclick="window.location='Plumbers.html'" style="cursor:pointer;">
+<img src="plumber.jpeg" alt="Plumber at work">
+<div class="details">
+<h3>Plumber</h3>
+<p>$49 per day</p>
+</div>
+</div>
+
+<div class="product-card" id="electrician-card" data-cities="New York,Los Angeles,Chicago,Houston,Miami,Seattle" onclick="window.location='Electrician.html'" style="cursor:pointer;">
+<img src="electrician.jpg" alt="Electrician at work">
+<div class="details">
+<h3>Electrician</h3>
+<p>$100 per day</p>
+</div>
+</div>
+
+<div class="product-card" id="labour-card" data-cities="New York,Los Angeles,Chicago,Houston,Miami,Seattle" onclick="window.location='Labours.html'" style="cursor:pointer;">
+<img src="labour.jpg" alt="Labourer at work">
+<div class="details">
+<h3>Labour</h3>
+<p>$70 per day</p>
+</div>
+</div>
+
+</div>
+</section>
+
+<section class="section" id="more-services">
+<h2>More Services</h2>
+<div class="product-grid">
+
+<div class="product-card" data-cities="New York,Chicago" onclick="window.location='Worker.html'" style="cursor:pointer;">
+<img src="workers.webp" alt="General worker at work">
+<div class="details">
+<h3>Worker</h3>
+<p>$50 per day</p>
+</div>
+</div>
+
+<div class="product-card" id="mason-card" data-cities="Los Angeles,Houston,Miami" onclick="window.location='Masons.html'" style="cursor:pointer;">
+<img src="mason.jpg" alt="Mason at work">
+<div class="details">
+<h3>Mason</h3>
+<p>$70 per day</p>
+</div>
+</div>
+
+</div>
+</section>
+
+<section class="section" id="specialized-services">
+<h2>Specialized Services</h2>
+<div class="product-grid">
+
+<div class="product-card" data-cities="New York,Miami" onclick="window.location='DrainageCleaner.html'" style="cursor:pointer;">
+<img src="drainage cleaner.webp" alt="Drainage cleaner at work">
+<div class="details">
+<h3>Drainage Cleaner</h3>
+<p>$59 per day</p>
+</div>
+</div>
+
+<div class="product-card" data-cities="Los Angeles,Chicago,Seattle" onclick="window.location='Cook.html'" style="cursor:pointer;">
+<img src="cook.jpg" alt="Cook at work">
+<div class="details">
+<h3>Cook</h3>
+<p>$89 per day</p>
+</div>
+</div>
+
+<div class="product-card" data-cities="Houston,Miami" onclick="window.location='RoadSweeper.html'" style="cursor:pointer;">
+<img src="road.jpg" alt="Road sweeper at work">
+<div class="details">
+<h3>Road Sweeper</h3>
+<p>$100 per day</p>
+</div>
+</div>
+
+<div class="product-card" data-cities="New York,Los Angeles,Chicago" onclick="window.location='PersonalDriver.html'" style="cursor:pointer;">
+<img src="driver.jpg" alt="Personal driver at work">
+<div class="details">
+<h3>Personal Driver</h3>
+<p>$169 per week</p>
+</div>
+</div>
+
+</div>
+</section>
+
+<section class="section" id="new-services">
+<h2>New Services</h2>
+<div class="product-grid">
+
+<div class="product-card" data-cities="Seattle,Miami" onclick="window.location='HouseCook.html'" style="cursor:pointer;">
+<img src="housecook.jpg" alt="House cook at work">
+<div class="details">
+<h3>House Cook</h3>
+<p>$10 per day</p>
+</div>
+</div>
+
+<div class="product-card" data-cities="New York,Los Angeles" onclick="window.location='MassageTherapist.html'" style="cursor:pointer;">
+<img src="massage.jpg" alt="Massage therapist at work">
+<div class="details">
+<h3>Massage Therapist</h3>
+<p>$10 per day</p>
+</div>
+</div>
+
+<div class="product-card" data-cities="Chicago,Houston,Seattle" onclick="window.location='RoomCleaner.html'" style="cursor:pointer;">
+<img src="roomcleaner.jpg" alt="Room cleaner at work">
+<div class="details">
+<h3>Room Cleaner</h3>
+<p>$10 per day</p>
+</div>
+</div>
+
+<div class="product-card" data-cities="New York,Los Angeles,Miami" onclick="window.location='PersonalGymTrainer.html'" style="cursor:pointer;">
+<img src="gymtrainer.jpg" alt="Personal gym trainer at work">
+<div class="details">
+<h3>Personal Gym Trainer</h3>
+<p>$10 per day</p>
+</div>
+</div>
+
+</div>
+</section>
+
+<section class="section" id="no-results" style="display:none;">
+<p style="color:#8a97a0; font-size:1.1rem;">No matching services found. Try a different search term.</p>
+</section>
+
+<section class="section" id="about">
+<h2>About Us</h2>
+<div class="info-card">
+<p>MasonWatchers is a platform dedicated to connecting individuals with skilled laborers and workers for various construction and home improvement services. Whether you need a carpenter, plumber, electrician, mason, or general laborer, we provide a wide range of trusted professionals to help with your projects. Our goal is to offer reliable, affordable, and timely services to meet your needs, ensuring quality work every time. Hire the best craftsmen in the industry with ease on MasonWatchers!</p>
+</div>
+</section>
+
+<section class="section" id="contact">
+<h2>Contact Us</h2>
+<div class="info-card">
+<div class="contact-item"><span class="icon">📧</span> <a href="mailto:contact@masonwatchers.com">contact@masonwatchers.com</a></div>
+<div class="contact-item"><span class="icon">📞</span> +1 (800) 123-4567</div>
+<div class="contact-item"><span class="icon">☎️</span> +1 (900) 124-4987 (Alternate)</div>
+</div>
+</section>
+
+<footer class="footer">
+<div class="footer-top">
+
+<div class="footer-brand">
+<div class="logo">Mason Watchers</div>
+</div>
+
+<div class="footer-col">
+<h4>Company</h4>
+<a href="#about">About Us</a>
+<a href="#">Terms &amp; Conditions</a>
+<a href="#">Privacy Policy</a>
+<a href="#">Careers</a>
+</div>
+
+<div class="footer-col">
+<h4>For Customers</h4>
+<a href="#new-services">Categories Near You</a>
+<a href="#contact">Contact Us</a>
+</div>
+
+<div class="footer-col">
+<h4>For Professionals</h4>
+<a href="register.html">Register as a Professional</a>
+</div>
+
+<div class="footer-col">
+<h4>Social Links</h4>
+<div class="social-icons">
+<a href="#" aria-label="X (Twitter)">𝕏</a>
+<a href="#" aria-label="Facebook">f</a>
+<a href="#" aria-label="Instagram">◎</a>
+<a href="#" aria-label="LinkedIn">in</a>
+</div>
+</div>
+
+</div>
+
+<div class="footer-bottom">
+<p>&copy; 2026 Mason Watchers. All rights reserved.</p>
+<p><a href="#top" style="color:#4a90c4;">Back to Top</a></p>
+</div>
+</footer>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+
+  // Unified dropdown toggle system (Account, Location, My Bookings, My Profile)
+  const toggleBoxes = document.querySelectorAll('.js-toggle');
+
+  toggleBoxes.forEach(function (box) {
+    box.addEventListener('click', function (e) {
+      e.stopPropagation();
+      const wasActive = box.classList.contains('active');
+      toggleBoxes.forEach(function (b) { b.classList.remove('active'); });
+      if (!wasActive) box.classList.add('active');
+    });
+
+    // Prevent clicks inside a popup from closing it immediately
+    const innerPopup = box.querySelector('.auth-popup, .location-dropdown, .icon-dropdown');
+    if (innerPopup) {
+      innerPopup.addEventListener('click', function (e) {
+        e.stopPropagation();
+      });
+    }
+  });
+
+  // Close any open dropdown when clicking elsewhere on the page
+  document.addEventListener('click', function () {
+    toggleBoxes.forEach(function (b) { b.classList.remove('active'); });
+  });
+
+  // Location city selection + service filtering
+  const locationText = document.getElementById('locationText');
+  const locationBox = document.getElementById('locationBox');
+  const searchInput = document.getElementById('serviceSearch');
+  const noResults = document.getElementById('no-results');
+  const serviceSections = document.querySelectorAll('#services, #more-services, #specialized-services, #new-services');
+
+  let selectedCity = null; // null = no city filter applied
+
+  function applyFilters() {
+    const query = searchInput.value.trim().toLowerCase();
+    let anyVisibleOverall = false;
+
+    serviceSections.forEach(function (section) {
+      const cards = section.querySelectorAll('.product-card');
+      let anyVisibleInSection = false;
+
+      cards.forEach(function (card) {
+        const title = card.querySelector('h3').textContent.toLowerCase();
+        const matchesSearch = title.includes(query);
+
+        const cardCities = (card.getAttribute('data-cities') || '').split(',').map(c => c.trim());
+        const matchesCity = !selectedCity || cardCities.includes(selectedCity);
+
+        const isMatch = matchesSearch && matchesCity;
+        card.style.display = isMatch ? '' : 'none';
+        if (isMatch) {
+          anyVisibleInSection = true;
+          anyVisibleOverall = true;
+        }
+      });
+
+      section.style.display = anyVisibleInSection ? '' : 'none';
+    });
+
+    noResults.style.display = (!anyVisibleOverall) ? 'block' : 'none';
+  }
+
+  searchInput.addEventListener('input', applyFilters);
+
+  document.querySelectorAll('.city-option').forEach(function (option) {
+    option.addEventListener('click', function (e) {
+      if (this.id === 'useMyLocation') return; // handled separately below
+      e.stopPropagation();
+      const cityValue = this.getAttribute('data-city');
+      if (cityValue === 'all') {
+        selectedCity = null;
+        locationText.textContent = 'Select Your Location';
+      } else {
+        selectedCity = this.textContent;
+        locationText.textContent = this.textContent;
+      }
+      locationBox.classList.remove('active');
+      applyFilters();
+    });
+  });
+
+  // "Use My Location" - GPS + Google Geocoding API
+  // 1. Get a free API key: https://console.cloud.google.com (enable "Geocoding API")
+  // 2. Restrict the key to your domain (Application restrictions > Websites)
+  // 3. Paste it below
+  const GOOGLE_MAPS_API_KEY = 'AIzaSyC9dIGY8IM185EpXioZSoCuk04Tqyqt1T8';
+
+  const knownCities = ['New York', 'Los Angeles', 'Chicago', 'Houston', 'Miami', 'Seattle'];
+
+  document.getElementById('useMyLocation').addEventListener('click', function (e) {
+    e.stopPropagation();
+
+    if (!navigator.geolocation) {
+      alert('Geolocation is not supported by your browser.');
+      return;
+    }
+
+    locationText.textContent = 'Detecting location...';
+
+    navigator.geolocation.getCurrentPosition(function (position) {
+      const lat = position.coords.latitude;
+      const lng = position.coords.longitude;
+
+      if (GOOGLE_MAPS_API_KEY === 'YOUR_API_KEY_HERE') {
+        alert('Google Maps API key not set yet. Add your key in the code to enable this feature.');
+        locationText.textContent = 'Select Your Location';
+        return;
+      }
+
+      const url = 'https://maps.googleapis.com/maps/api/geocode/json?latlng=' + lat + ',' + lng + '&key=' + GOOGLE_MAPS_API_KEY;
+
+      fetch(url)
+        .then(function (response) { return response.json(); })
+        .then(function (data) {
+          if (data.status !== 'OK' || !data.results.length) {
+            locationText.textContent = 'Location not found';
+            return;
+          }
+
+          // Find the "locality" (city) component from the address
+          let detectedCity = null;
+          for (const result of data.results) {
+            const locality = result.address_components.find(c => c.types.includes('locality'));
+            if (locality) {
+              detectedCity = locality.long_name;
+              break;
+            }
+          }
+
+          if (detectedCity && knownCities.includes(detectedCity)) {
+            selectedCity = detectedCity;
+            locationText.textContent = detectedCity;
+          } else if (detectedCity) {
+            selectedCity = null;
+            locationText.textContent = detectedCity + ' (not covered - showing all)';
+          } else {
+            locationText.textContent = 'Location not found';
+          }
+
+          locationBox.classList.remove('active');
+          applyFilters();
+        })
+        .catch(function () {
+          locationText.textContent = 'Could not detect location';
+        });
+
+    }, function () {
+      locationText.textContent = 'Location permission denied';
+    });
+  });
+});
+</script>
+
+</body>
+</html>
